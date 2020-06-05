@@ -1,6 +1,6 @@
 ### In an amazon fulfillment center near you ...
 
-your job application turns out to be against a bunch of newly designed super-efficient robots!
+... your job application turns out to be against a bunch of newly designed super-efficient robots!
 
 In an environment that slowly drives you mad with all it's technical difficulties on top of a super-compartmentalized,
 competitive and unyielding hierarchy of snobbishness, exploited by the super-rich and kept in fuel by uncertainty 
@@ -10,7 +10,7 @@ and desires of super-utilized employees like yourself.
 
 And rather join this super software project to help programing the machines for all the stupid jobs in the world.
 
-Apart from conforming to the [The Three Laws of Robotics](https://en.wikipedia.org/wiki/Three_Laws_of_Robotics), 
+Apart from conforming to [The Three Laws of Robotics](https://en.wikipedia.org/wiki/Three_Laws_of_Robotics), 
 the robots should:
 
   - work **super-efficient**
@@ -27,9 +27,13 @@ Don't forget! *You'll PAY to know what you REALLY think!*
 **Preferences** of robots are encoded in the **utility function**, 
 where differences might result in characteristics like:
  
-  - *really hard working*
+  - trying to be a useful workaholic
   - trying to make others look bad
 
 And all that given the uncertainty of outcomes of actions in a cramped, dusty fulfillment stock where things lie
-about everywhere, stock keeping units are printed too small and the stock keeper lusts for someone he can blame
-for his recent mistakes.  
+about everywhere, **s**tock **k**eeping **u**nits are printed way too small and the stock keeper lusts for someone 
+he can blame for his recent mistakes and so helps reproducing the enterprise-driven punishment down to every 
+level of livelihood.
+
+Super!
+
