@@ -24,9 +24,13 @@ class PickOrder(ItemBase):
         super().__init__("po")
         self.item_lines = item_lines
 
+    def __str__(self):
+        return f"{self.__class__.__name__}({self.item_lines})"
+
 
 class Article(ItemBase):
 
     def __init__(self, asin):
         super().__init__(asin)
         self.asin = asin
+

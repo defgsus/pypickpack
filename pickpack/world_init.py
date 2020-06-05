@@ -59,11 +59,12 @@ def init_pickpack_world(world):
         R = 11  # robot
         C = 20  # computer
         S = 30  # shelf
+        p = 40  # package
 
     MAP = """
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
-W                   WCWW     W
-W   P                  W     W
+W      ppppp        WCWW     W
+W   P  ppppp           W     W
 W                      W     W
 W                            W
 W                      WWWWWWW
@@ -123,6 +124,11 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
 
             elif m == Things.C:
                 agent = Computer(f"CO{len(world.agents)}")
+                agent.x, agent.y = x, y
+                world.agents.add_agent(agent)
+
+            elif m == Things.p:
+                agent = Package(f"PK{len(world.agents)}")
                 agent.x, agent.y = x, y
                 world.agents.add_agent(agent)
 
