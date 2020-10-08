@@ -62,7 +62,7 @@ class Robot(RobotBase):
             if agent:
                 possible_actions.append(MoveBefore(agent.position))
 
-        # log(possible_actions)
+        log(possible_actions)
 
         possible_actions[1].execute(world, self)
 

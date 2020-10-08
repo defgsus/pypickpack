@@ -5,13 +5,13 @@ from .._2d import *
 
 
 class Shelf(AgentBase):
-    def __init__(self, shelf_id, max_items=20):
-        from ..items import Article
+    def __init__(self, shelf_id, max_items=20, num_items=10):
         super().__init__(f"shelf-{shelf_id}", pushable=False, max_items=max_items)
+        from ..items import Article
         self.shelf_id = shelf_id
         self.items = [
             Article(f"B0{self.shelf_id}")
-            for i in range(10)
+            for i in range(num_items)
         ]
 
     def on_picked(self, world, agent):

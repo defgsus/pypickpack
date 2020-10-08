@@ -20,7 +20,8 @@ class Computer(AgentBase):
             self.spit_pick_order(world)
 
     def create_pick_order(self, world):
-        from .items import PickOrder
+        from .shelf import Shelf
+        from ..items import PickOrder
 
         shelves = world.agents.filter_by_class(Shelf)
         line_items = [
