@@ -1,8 +1,8 @@
 import time
 
 from .world import World
-from .robot import RobotBase
 from .agents import Player
+from .robots import RobotBase
 from .log import log
 
 
@@ -17,7 +17,7 @@ class Game:
         self.world = World()
         self._last_proc_time = 0
         self.game_time = 0
-        self.pause = True
+        self.pause = False
 
     def process_key(self, key):
         if key == "KEY_UP":
@@ -59,21 +59,21 @@ class Game:
 
         self.game_time += time_delta
 
-    def stats_str(self):
+    def get_stats_str(self):
         s = "use: up,down,left,right: move\n"
         s += "q: put, a: pick, p: play/pause\n"
 
         s += f"\ntime: {round(self.game_time, 2)} sec\n\n"
 
-        s += self.agents_stats_str(self.world.player)
+        s += self.get_agents_stats_str(self.world.player)
         for agent in self.world.agents:
             if isinstance(agent, RobotBase):
-                s += "\n" + self.agents_stats_str(agent)
+                s += "\n" + self.get_agents_stats_str(agent)
         s += "\n"
 
         return s
 
-    def agents_stats_str(self, agent):
+    def get_agents_stats_str(self, agent):
         s = f"{agent.stats_str()}\n"
         s += "items: " + ", ".join(str(i) for i in agent.items) + "\n"
         if isinstance(agent, Player):

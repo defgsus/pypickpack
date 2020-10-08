@@ -1,5 +1,5 @@
 
-from .pos import distance, manhatten_distance, direction
+from ._2d import distance, manhatten_distance, direction
 
 
 def astar_search(start_node, end_node, adjacent_nodes_func, goal_cost_func=None):

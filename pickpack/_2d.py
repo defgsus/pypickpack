@@ -4,6 +4,10 @@ Some helper for 2d positions as tuples
 import math
 
 
+def add_2d(p1, p2):
+    return p1[0] + p2[0], p1[1] + p2[1]
+
+
 def distance(p1, p2):
     dx, dy = p1[0] - p2[0], p1[1] - p2[1]
     return math.sqrt(dx*dx + dy*dy)

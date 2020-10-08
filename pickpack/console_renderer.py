@@ -3,7 +3,7 @@ import curses
 from .static_map import StaticMap
 from .agents import Player, Package, Computer, Shelf
 from .items import PickOrder, Article
-from .robot import RobotBase
+from .robots import RobotBase
 
 
 class ConsoleRenderer:
@@ -34,12 +34,17 @@ class ConsoleRenderer:
         return self.window.getmaxyx()
 
     def print(self, *args):
+        h, w = self.resolution()
         s = " ".join(str(a) for a in args)
         s = self._limit_str_length(s, self.print_window.getmaxyx()[1])
         num_lines = 1 + sum(1 for x in filter(lambda c: c == "\n", s))
-        self.print_window.move(0, 0)
-        self.print_window.insdelln(num_lines + 1)
-        self.print_window.insstr(s)
+        try:
+            self.print_window.move(0, 0)
+            self.print_window.insdelln(-num_lines)
+            self.print_window.move(h-num_lines, 0)
+            self.print_window.insstr(s)
+        except curses.error:
+            pass
 
     def stats(self, *args):
         s = " ".join(str(a) for a in args)

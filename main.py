@@ -22,13 +22,13 @@ def main(window):
         while True:
             try:
                 key = window.getkey()
-                #renderer.print("KEY", key)
+                # renderer.print("KEY", key)
                 game.process_key(key)
             except curses.error:
                 pass
 
             renderer.render_world(game.world)
-            renderer.stats(game.stats_str())
+            renderer.stats(game.get_stats_str())
             renderer.update()
 
             game.process_game()
@@ -39,7 +39,6 @@ def main(window):
 
 
 def debug():
-    from pickpack.astar import AStar
     game = Game()
 
     game.process_game()

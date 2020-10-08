@@ -2,7 +2,7 @@ import random
 
 from .static_map import StaticMap
 from .agents import Player, Package, Computer, Shelf
-from .robot import Robot, RandomRobot
+from .robots import Robot, RandomRobot
 
 
 def init_random_world(world, width, height, rnd=None):
@@ -98,7 +98,7 @@ W   WW  WW  WW  WW  WW  WW   W
 W   SS  SS  SS  SS  SS  SS   W                
 W                            W
 W                            W
-WR                          RW
+WR                           W
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
 """
     MAP = [

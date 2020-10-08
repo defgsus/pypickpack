@@ -1,10 +1,9 @@
 import random
-from functools import partial
 
 from .static_map import StaticMap
-from .agents import Agents, Player, Package
-from .robot import Robot
+from .agents import Agents
 from .log import log
+from ._2d import manhatten_distance
 
 
 class World:
@@ -41,7 +40,9 @@ class World:
                 self._agent_map[agent.y][agent.x] = agent
         return self._agent_map
 
-    def add_agent(self, agent):
+    def add_agent(self, agent, pos=None):
+        if pos is not None:
+            agent.x, agent.y = pos
         self.agents.add_agent(agent)
         self._agent_map = None
 
@@ -56,7 +57,7 @@ class World:
 
         :param agent: Agent instance
         :param direction: (int, int)
-        :param pushed_by: optional Agent instance which is pushing
+        :param pushed_by: optional Agent instance which is pushing - may not be in the world yet!
         :return: bool
         """
         if not pushed_by:
@@ -150,17 +151,72 @@ class World:
             return None, None
         return x, y
 
+    def is_static_map_empty(self, pos):
+        return self.static_map.map[pos[1]][pos[0]] == StaticMap.Tiles.EMPTY
+
+    def is_empty(self, pos):
+        """
+        Is this square empty (no static-map, no agent)
+        :param pos: (int, int)
+        :return: bool
+        """
+        if self.static_map.map[pos[1]][pos[0]] != StaticMap.Tiles.EMPTY:
+            return False
+        if self.agent_map[pos[1]][pos[0]]:
+            return False
+        return True
+
     def get_empty_position(self, rnd=None):
         if rnd is None:
             rnd = random
         while True:
             x = rnd.randrange(self.width)
             y = rnd.randrange(self.height)
-            if self.static_map.map[y][x] != StaticMap.Tiles.EMPTY:
-                continue
-            if self.agents.get_agent_at(x, y):
-                continue
-            return x, y
+            if self.is_empty((x, y)):
+                return x, y
+
+    def get_empty_neighbour(self, pos, close_to=None):
+        """
+        Return an empty neighbouring position
+        :param pos: (int, int)
+        :param close_to: (int, int) a position to which the neighbour should be closest
+        :return: (int, int) or None
+        """
+        positions = []
+        if pos[0] > 0:
+            positions.append((pos[0]-1, pos[1]))
+        if pos[0] < self.width - 1:
+            positions.append((pos[0]+1, pos[1]))
+        if pos[1] > 0:
+            positions.append((pos[0], pos[1]-1))
+        if pos[1] < self.height - 1:
+            positions.append((pos[0], pos[1]+1))
+
+        if close_to:
+            positions.sort(key=lambda p: manhatten_distance(p, close_to))
+
+        for p in positions:
+            if self.is_empty(p):
+                return p
+
+    def get_closest_agent(self, pos, *classes):
+        closest_agent = None
+        closest_dist = self.width * self.height
+        for agent in self.agents:
+            does_match = True
+
+            if classes:
+                does_match = False
+                for c in classes:
+                    if isinstance(agent, c):
+                        does_match = True
+                        break
+
+            if does_match:
+                dist = manhatten_distance(pos, agent.position)
+                if dist < closest_dist:
+                    closest_dist, closest_agent = dist, agent
+        return closest_agent
 
     def can_push_from_to(self, p1, p2):
         """
