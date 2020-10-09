@@ -8,6 +8,13 @@ class MoveBefore(ActionBase):
     def __init__(self, position):
         super().__init__(position=position)
 
+    def get_estimated_cost(self, world, agent):
+        mdist = manhatten_distance(agent.position, self.parameters["position"])
+        return max(0, mdist-1)
+
+    def is_finished(self, world, agent):
+        return manhatten_distance(agent.position, self.parameters["position"]) == 1
+
     def execute(self, world, agent):
         if manhatten_distance(agent.position, self.parameters["position"]) == 1:
             return True
@@ -38,6 +45,13 @@ class MoveTo(ActionBase):
 
     def __init__(self, position):
         super().__init__(position=position)
+
+    def get_estimated_cost(self, world, agent):
+        mdist = manhatten_distance(agent.position, self.parameters["position"])
+        return max(0, mdist-1)
+
+    def is_finished(self, world, agent):
+        return agent.position == self.parameters["position"]
 
     def execute(self, world, agent):
         if agent.position == self.parameters["position"]:

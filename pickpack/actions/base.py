@@ -10,6 +10,12 @@ class ActionBase:
     def __repr__(self):
         return f"{self.__class__.__name__}({self.parameters})"
 
+    def copy(self):
+        return self.__class__(**self.parameters)
+
+    def is_finished(self, world, agent):
+        raise NotImplementedError
+
     def execute(self, world, agent):
         """
         Let agent execute the action in world.
@@ -17,4 +23,13 @@ class ActionBase:
         :param agent: AgentBase
         :return: bool, If it could be executed or is already finished
         """
-        raise NotImplemented
+        raise NotImplementedError
+
+    def get_estimated_cost(self, world, agent):
+        """
+        Return an estimated cost of executing this action through agent in world
+        :param world: World
+        :param agent: AgentBase
+        :return: int/float
+        """
+        raise NotImplementedError

@@ -1,7 +1,7 @@
 import random
 
 from .static_map import StaticMap
-from .agents import Agents
+from .agents import Agents, Player
 from .log import log
 from ._2d import manhatten_distance
 
@@ -27,7 +27,19 @@ class World:
         self.static_map = StaticMap()
         self.static_map.init(self.width, self.height)
 
-        self.agents = Agents(self)
+        self.agents = Agents()
+
+    def copy(self):
+        c = self.__class__()
+        c.width = self.width
+        c.height = self.height
+        c.static_map = self.static_map
+        c.agents = self.agents.copy()
+        c.agents.world = c
+        c.player = list(filter(lambda a: isinstance(a, Player), c.agents))[0]
+        c.game_time = self.game_time
+        self._agent_map = None
+        return c
 
     @property
     def agent_map(self):
@@ -111,7 +123,10 @@ class World:
 
         result = other_agent.on_picked(self, agent)
         if result:
-            log(f"{agent} picked {other_agent}")
+            msg = f"{agent} picked {other_agent}"
+            if hasattr(agent, "get_heuristic_value"):
+                msg += f", heur={agent.get_heuristic_value(self)}"
+            log(msg)
         return result
 
     def agent_put(self, agent, direction, item):
@@ -128,6 +143,7 @@ class World:
             if other_agent.on_put(self, agent, item):
                 agent.remove_item(item)
                 log(f"{agent} put {item} into {other_agent}")
+                agent.on_has_put(item, other_agent=other_agent)
                 return True
             # if agent doesn't take, try to push it away
             if not self.agent_move(other_agent, direction, pushed_by=agent):
@@ -140,6 +156,7 @@ class World:
             item.x, item.y = x, y
             self.add_agent(item)
             log(f"{agent} put {item} at {(x, y)}")
+            agent.on_has_put(item, position=(x, y))
             return True
         return False
 
@@ -199,10 +216,13 @@ class World:
             if self.is_empty(p):
                 return p
 
-    def get_closest_agent(self, pos, *classes):
+    def get_closest_agent(self, pos, *classes, exclude_agents=None):
         closest_agent = None
         closest_dist = self.width * self.height
         for agent in self.agents:
+            if exclude_agents and agent in exclude_agents:
+                continue
+
             does_match = True
 
             if classes:

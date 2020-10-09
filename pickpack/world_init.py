@@ -3,6 +3,7 @@ import random
 from .static_map import StaticMap
 from .agents import Player, Package, Computer, Shelf
 from .robots import Robot, RandomRobot
+from .items import Article
 
 
 def init_random_world(world, width, height, rnd=None):
@@ -95,10 +96,10 @@ W   SS  SS  SS  SS  SS  SS   W
 W   WW  WW  WW  WW  WW  WW   W                 
 W   SS  SS  SS  SS  SS  SS   W                
 W   WW  WW  WW  WW  WW  WW   W                 
-W   SS  SS  SS  SS  SS  SS   W                
+W  RSS  SS  SS  SS  SS  SS   W                
 W                            W
 W                            W
-WR                           W
+W                            W
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
 """
     MAP = [
@@ -134,6 +135,11 @@ WWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
 
             elif m == Things.S:
                 agent = Shelf(chr(ord('A') + shelf_counter // 9) + chr(ord('1') + shelf_counter % 9))
+                agent.items = [
+                    Article(f"B0{agent.shelf_id}")
+                    for i in range(10)
+                ]
+
                 agent.x, agent.y = x, y
                 world.agents.add_agent(agent)
                 shelf_counter += 1

@@ -75,6 +75,8 @@ class Game:
 
     def get_agents_stats_str(self, agent):
         s = f"{agent.stats_str()}\n"
+        if hasattr(agent, "get_heuristic_value"):
+            s += f"heuristic: {agent.get_heuristic_value(self.world)}\n"
         s += "items: " + ", ".join(str(i) for i in agent.items) + "\n"
         if isinstance(agent, Player):
             s += f"selected item: {agent.selected_item()} ({agent.selected_item_index+1})\n"

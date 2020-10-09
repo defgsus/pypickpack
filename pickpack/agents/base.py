@@ -23,7 +23,6 @@ class AgentBase:
         self.y = 0
         self.dir_x = 0
         self.dir_y = -1
-        self.agents = None
         self.pushable = pushable
         self.processing_fps = processing_fps
         self._last_processing_time = -processing_fps
@@ -40,6 +39,25 @@ class AgentBase:
     @property
     def direction(self):
         return self.dir_x, self.dir_y
+
+    def copy(self):
+        c = self._copy_construct()
+        c.x = self.x
+        c.y = self.y
+        c.dir_x = self.dir_x
+        c.dir_y = self.dir_y
+        c.pushable = self.pushable
+        c.processing_fps = self.processing_fps
+        c._last_processing_time = self._last_processing_time
+        c.items = [i.copy() for i in self.items]
+        c.max_items = self.max_items
+        return c
+
+    def _copy_construct(self):
+        try:
+            return self.__class__(id=self.id)
+        except TypeError as e:
+            raise TypeError(f"{e}: for class {self.__class__.__name__}")
 
     def stats_str(self):
         return f"{self.id}: {self.position} -> {self.direction}"
@@ -66,6 +84,14 @@ class AgentBase:
             self.items.pop(idx)
             return True
         return False
+
+    def items_by_class(self, *classes):
+        return list(filter(lambda i: isinstance(i, classes), self.items))
+
+    def item_by_id(self, id):
+        for item in self.items:
+            if item.id == id:
+                return item
 
     def is_inventory_full(self):
         return len(self.items) >= self.max_items
@@ -113,3 +139,7 @@ class AgentBase:
         # log(f"{self}.on_pushed({agent})")
         pass
 
+    def on_has_put(self, item, position=None, other_agent=None):
+        assert position or other_agent, f"{self.__class__.__name__}.on_has_put() has been called without " \
+                                        f"position nor other_agent"
+        pass

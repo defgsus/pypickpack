@@ -12,9 +12,6 @@ class RobotBase(AgentBase):
     def __init__(self, id, processing_fps=3):
         super().__init__(id, processing_fps=processing_fps)
 
-    def is_next_move_frame(self, world):
-        return True
-
     def get_adjacent_nodes(self, world, pos, exclude_agents=None):
         """
         Returns the accessible adjacent nodes in the world and their cost

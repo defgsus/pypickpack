@@ -9,3 +9,6 @@ class PickOrder(ItemBase):
 
     def __str__(self):
         return f"{self.__class__.__name__}({self.item_lines})"
+
+    def _copy_construct(self):
+        return self.__class__(item_lines=self.item_lines)
